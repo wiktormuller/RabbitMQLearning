@@ -111,11 +111,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Wiktor\\Desktop\\Receiver\\Receiver\\Receiver.csproj",
+      "projectUniqueName": "C:\\Users\\Wiktor\\Desktop\\RabbitMQTutorial\\Receiver\\Receiver\\Receiver.csproj",
       "projectName": "Receiver",
-      "projectPath": "C:\\Users\\Wiktor\\Desktop\\Receiver\\Receiver\\Receiver.csproj",
+      "projectPath": "C:\\Users\\Wiktor\\Desktop\\RabbitMQTutorial\\Receiver\\Receiver\\Receiver.csproj",
       "packagesPath": "C:\\Users\\Wiktor\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Wiktor\\Desktop\\Receiver\\Receiver\\obj\\",
+      "outputPath": "C:\\Users\\Wiktor\\Desktop\\RabbitMQTutorial\\Receiver\\Receiver\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Wiktor\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,0 +1,17 @@
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\bin\Debug\net6.0\SecondReceiver.exe
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\bin\Debug\net6.0\SecondReceiver.deps.json
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\bin\Debug\net6.0\SecondReceiver.runtimeconfig.json
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\bin\Debug\net6.0\SecondReceiver.dll
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\bin\Debug\net6.0\SecondReceiver.pdb
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.csproj.AssemblyReference.cache
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.AssemblyInfoInputs.cache
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.AssemblyInfo.cs
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.csproj.CoreCompileInputs.cache
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.csproj.CopyComplete
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.dll
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\refint\SecondReceiver.dll
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.pdb
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\SecondReceiver.genruntimeconfig.cache
+C:\Users\Wiktor\Desktop\RabbitMQTutorial\SecondReceiver\SecondReceiver\obj\Debug\net6.0\ref\SecondReceiver.dll

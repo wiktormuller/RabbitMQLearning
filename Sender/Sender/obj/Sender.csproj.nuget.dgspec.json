@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Wiktor\\Desktop\\Sender\\Sender\\Sender.csproj": {}
+    "C:\\Users\\Wiktor\\Desktop\\RabbitMQTutorial\\Sender\\Sender\\Sender.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Wiktor\\Desktop\\Sender\\Sender\\Sender.csproj": {
+    "C:\\Users\\Wiktor\\Desktop\\RabbitMQTutorial\\Sender\\Sender\\Sender.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Wiktor\\Desktop\\Sender\\Sender\\Sender.csproj",
+        "projectUniqueName": "C:\\Users\\Wiktor\\Desktop\\RabbitMQTutorial\\Sender\\Sender\\Sender.csproj",
         "projectName": "Sender",
-        "projectPath": "C:\\Users\\Wiktor\\Desktop\\Sender\\Sender\\Sender.csproj",
+        "projectPath": "C:\\Users\\Wiktor\\Desktop\\RabbitMQTutorial\\Sender\\Sender\\Sender.csproj",
         "packagesPath": "C:\\Users\\Wiktor\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Wiktor\\Desktop\\Sender\\Sender\\obj\\",
+        "outputPath": "C:\\Users\\Wiktor\\Desktop\\RabbitMQTutorial\\Sender\\Sender\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Wiktor\\AppData\\Roaming\\NuGet\\NuGet.Config",
