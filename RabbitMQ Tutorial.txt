@@ -1,0 +1,438 @@
+RabbitMQ Tutorial
+
+Introduction:
+	RabbitMQ is a message broker: it accepts and forward messages. You can think about it as a post office: when you put the email that you want posting in a post box, you can be sure that the letter cerrier will eventually deliver the main to your recipient. In this analogy, RabbitMQ is a post box, a post office, and a letter carrier.
+
+	The major difference between RabbitMQ and the post office is that it doesn't deal with paper, instead it accepts, stores and forwards binary blobs of data - messages.
+
+	RabbitMQ, and messaging in general, uses some jargon:
+		- Producing means nothing more than sending. A program that sends messages is a producer.
+		
+		- A queue is the name for a post box which lives inside RabbitMQ. Although messages flow through RabbitMQ and your applications, they can only be stored inside a queue. A queue is only bound by the host's memory & disk limits, it's essentially a large message buffer. Many producers can send messages that go to one queue, and many consumers can try to receive data from one queue.
+
+		- Consuming has a similar meaning to receiving. A consumer is a program that mostly waits to receive messages.
+
+	Note that the producer, consumer, and broker do not have to reside on the same host: indeed in most applications they don't. An application can be both a producer and consumer, too.
+
+Hello world:
+	Sending:
+		The connection abstract the socket connection, and takes care of protocol version negotiation and authentication and so on for us.
+
+		A channel, is where a most of the API for getting things done resides.
+
+		To send we must declare a queue for us to send to; then we can publish a message to the queue.
+
+		Declaring a queue is idempotent - it will only be created if it doesn't exist already. The message content is a byte array, so you can encode whatever you like there.
+
+	Receiving:
+		As for the consumer, it is listening for messages from RabbitMQ. So unlike the publisher which publishes a single message, we will keep the consumer running continuously to listen for messages and proint them out.
+
+		Note that we should declare the queue here as well. Because we might start the consumer before the publisher, we want to make sure the queue exists before we try to consume messages from it.
+
+		We are about to tell the server to deliver us the messages from the queue. Since it will push us messages asynchronously, we provide a callback. That is what EventBasicConsumer.Received event handler does.
+
+
+Work Queues:
+	The main idea behind Work Queues (aka: Task Queues) is to avoid doing a resource-intensive task immediately and having to wait for it to complete. Instead we schedule the task to be done later. We encapsulate a task as a message and send it to a queue. A worker process running in the background will pop the tasks and eventually execute the job. When you run many workers the tasks will be shared between them.
+
+	This concept is especially useful in web applications where it's impossible to handle a complex task during a short HTTP request window.
+
+	One of the advantages of using a Task Queue is the ability to easily parallelise work. If we are building up a backlog of work, we can just add more workers and that way, scale easily.
+
+	If we run two Worker instances at the same time. They will both get messages from the queue (not at the same time by default).
+
+	By default RabbitMQ will send each message to the next consumer, in sequence. On average every consumer will get the same number of messages. This way of distributing messages is called round-robin.
+
+	Message acknowledgment:
+		Doing a task can take a few seconds. You may wonder what happens if one of the consumers starts a long task and dies with it only partly done. With our current code, once RabbitMQ delivers a message to be consumer it immediately marks it for deletion. In this case, if you kill a worker we will lose the message it was just processing. We will also lose all the messages that were dispatched to this particular worker but were not yet handled.
+
+		But we don't want to lose any tasks. If a worker dies, we'd like the task to be delivered to another worker.
+
+		In order to make sure a message is never lost, RabbitMQ supports message acknowledgments. An ack(nowledgment) is sent back by the consumer to tell RabbitMQ that a particular message has been received, processed and that RabbitMQ is free to delete it.
+
+		If a consumer dies (its channel is closed, connection is closed, or TCP connection is lost) without sending an ack, RabbitMQ will understand that a message wasn't processed fully and will re-queue it. If there are other consumers online at the same time, it will then quickly redeliver it to another consumer. That way you can be sure that no message is lost, even if the workers occasionally die.
+
+		A timeout (30 minutes by default) is enforced on consumer delivery acknowledgment. This helps detect buggy (stuck) consumers that never acknowledge deliveries. You can increase this timeout as you want.
+
+		Manual message acknowledgments are turned on by default. In previous examples we explicitly turned them off by setting the autoAck ("automatic acknowledgment mode") parameter to true. It's time to remove this flag and manually send a proper acknowledgment from the worker, once we are done with a task.
+
+		Thanks to setting autoAck setting to false, even if you kill a worker using CTRL+C while it was processing a message, nothing will be lost. Soon after the worker dies all unacknowledged messages will be redelivered.
+
+		Acknowledgement must be sent on the same channel that received the delivery. Attempts to acknowledge using a different channel will result in a channel-level protocol exception.
+
+	Forgotten acknowledgment:
+		It's a common mistake to miss the BasicAck. It's an eassy error, but the consequences are serious. Messages will be redelivered when your client quits (which may look like random delivery redelivery), but RabbitMQ will eat more and more memory as it won't be able to releasy any unacked messages.
+
+		In order to debug this kind of mistake you can use rabbitmqctl to print the messages_unacknowledged field:
+			rabbitmqctl list_queues name messages_ready messages_unacknowledged
+
+	Message durability:
+		We have learned how to make sure that even if the consumer dies, the task isn't lost. But our tasks will still be lost if RabbitMQ server stops.
+
+		When RabbitMQ quits or crashes it will forget the queues and messages unless you tell it not to. Two things are required to make sure that messages aren't lost: we need to mark both the queue and messages as durable.
+
+	Note on Message Persistence:
+		Marking messages as persistent doesn't fully guarantee that a message won't be lost. Although it tells RabbitMQ to save the message to disk, there is still a short time window when RabbitMQ has accepted a message and hasn't saved it yet. Also, RabbitMQ doesn't do fsync(2) for every message - it may be just saved to cache and not really written to the disk. The persistence guarantees aren't strong, but it's more than enough for our simple task queue. If you need a stronger guarantee then you can use publisher confirms.
+
+	Fair Dispatch:
+		You might have noticed that the dispatching still doesn't work exactly as we want. For example in a situation with two workers, when all odd messages are heavy and even messages are light, one worker will be constantly busy and the other one will do hardly any work. Well, RabbitMQ doesn't know anything about that and will still dispatch messages evenly.
+
+		This happens because RabbitMQ just dispatches a message when the message enters the queue. It doesn't look at the number of unacknowledged messages for a consumer, it just blindly dispatches every n-th message to the n-th consumer.
+
+		In order to change this behavior we can use the BasicQos method with the prefetchCount=1 setting. This tells RabbitMQ not to give more than one message to a worker at a time. Or, in other words, don't dispatch a new message to a worker until it has processed and acknowledged the previous one. Instead, it will dispatch it to the next worker that is not still busy.
+
+		Note about queue size:
+			If all the workers are busy, your queue can fill up. You will want to keep an eye on that, and maybe add more workers, or have some other strategy.
+
+		Using message acknowledgments and BasicQos you can set up a work queue. The durability options let the tasks survive even if RabbitMQ is restarted.
+
+
+Publish / Subscribe:
+	The assumption behind the above work queue is that each task is delivered to exactly one worker. In this part we will do something sompletely different - we will deliver a message to multiple consumers. This pattern is known as "publish/subscribe".
+
+	To illustrate the pattern, we are going to build a simple logging system. It will consist of two programs - the first will emit log messages and the second will receive and print them.
+
+	In our logging system every running copy of the receiver program will get the messages. That way we will be able to run one receiver and direct the logs to disk: and at the same wil we wil be able to run another receiver and see the logs on the screen.
+
+	Essentially, published log messages are going to be broadcast to all the receivers.
+
+	Exchanges:
+		In the previous parts of the tutorial we sent and received messages to and from a queue. Now it's time to introduce the full messaging model in Rabbit.
+
+		Let's quickly go over what we covered in the previous sections:
+			- A producer is a user application that sends messages.
+			- A queue is a buffer that stores messages.
+			- A consumer is a user application that receives messages.
+
+		The core idea in the messaging model in RabbitMQ is that the producer never sends any messages directly to a queue. Actually, quite often the producer doesn't even know if a message will be delivered to any queue at all.
+
+		Instead, the producer can only send messages to an exchange. An exchange is a very simple thing. On one side it receives messages from producers and the other side it pushes them to queues. The exchange must know exactly what to do with a message it receives. Should it be appended to a particular queue? Should it be appended to many queues? Or should it get discarded. The rules for that are defined by the exchange type.
+
+		There are a few exchange types available: direct, topic, headers and fanout. We will focus on the last one - the fanout.
+
+		The fanout exchange is very simple. As you can probably guess from the name, it just broadcasts all the messages it receives to all the queues it knows. And that's exactly what we need for our logger.
+
+		Default exchange:
+			In previous parts of the tutorial we knew nothing about exchanges, but still were able to send messages to queues. That was possible because we were using a default exchange, which we identify by the empty string.
+
+	Temporary queues:
+		As you may remember previously we were using queues that had specific names (hello). Being able to name a queue was crucial for us - we needed to point the workers to the same queue. Giving a queue a name is important when you want to share the queue between producers and consumers.
+
+		But that's not the case for our logger. We want to hear about all log messages, not just a subset of them. We are also interested only in currently flowing messages not in the old ones. To solve that we need two things.
+
+		Firstly, whenever we connect to Rabbit we need a fresh, empty queue. To do this we could create a queue with a random name, or, even better - let the server choose a random queue name for us.
+
+		Secondly, once we disconnect the consumer the queue should be automatically deleted.
+
+		In the .NET client, when we supply no parameters to QueueDeclare() we create a non-durable exclusive, autodelete queue with a generates name:
+			var queueName = channel.QueueDeclare().QueueName;
+
+		At this point queueName constains a random queue name. For example it may looks like: amq.gen-JzTY20BRgKO-HjmUJj0wLg
+
+	Bindings:
+		We've already created a fanout exchange and a queue. Now we need to tell the exchange to send messages to our queue. That relationship between exchange and a queue is called a binding.
+			channel.QueueBinding(queue: queueName, exchange: "logs", routingKey: "");
+
+		From now the logs exchange will append messages to our queue.
+
+	Putting it all together:
+		The producer program, which emits log messages, doesn't look much different from the previous tutorial. The most important change is that we now want to publish messages to our logs exchange instead of the nameless one. We need to supply a routingKey when sending, but its value is ignored for fanout exchanges.
+
+		After establishing the connection we declared the exchange. This step is necessary as publishing to a non-existing exchange is forbidden.
+
+		The messages will be lost if no queue is bound to the exchange yet, but that's okay for us; if no consumer is listening yet we can safely discard the message.
+
+
+Routing:
+	Previously we built a simple logging system. We were able to broadcast log messages to many receivers.
+
+	Now, we are going to add a feature to it - we are going to make it possible to subscribe only to a subset of the messages. For example, we will be able to direct only critical error messages to the log file (to save disk space), while still being able to print all of the log messages on the console.
+
+	Bindings:
+		In previous examples we were already creating bindings. You may recall code like:
+			channel.QueueBind(queue: queueName, exchange: "logs", routingKey: "");
+
+		A binding is a relationship between an exchange and a queue. This can be simply read as: the queue is interested in messages from this exchange.
+
+		Bindings can take an extra routingKey parameter. To avoid the confusion with a BasicPublish parameter we are going to call it a binding key. This is how we could create a binding with a key:
+			channel.QueueBind(queue: queueName, exchange: "direct_logs", routingKey: "black");
+
+		The meaning of a binding key depends on the exchange type. The fanout exchanges, which we used previously, simply ignored its value.
+
+	Direct exchange:
+		Our logging system from the previous tutorial broadcasts all messages to all consumers. We want to extend that to allow filtering messages based on their severity. For example we may want the script which is writing log messages tothe disk to only receive critical errors, and not waste disk space on warning or info log messages.
+
+		We were using a fanout exchange, which doesn't give us much flexibility - it's only capable of mindless broadcasting.
+
+		We will use a direct exchange instead. The routing alghorithm behind a direct exchange is simple - a message goes to the queues whose binding key exactly matches the routing key of the message.
+
+		For example, there is a direct exchange 'x' with two queues bound to it. The first queue is bound with binding key orange, and the second has two bindings, one with binding key black and the other one with green.
+
+		In such a setup a message published to the exchange with a routing key orange will be routed to queue Q1. Messages with a routing key of black or orange will go to Q2. All other messages will be discarded.
+
+	Multiple bindings:
+		It is perfectly legal to bind multiple queues with the same binding key. In our example we could add a binding between X and Q1 with binding key black. In that case, the direct exchange will bejave like fanout and will broadcast the message to all the matching queues. A message with routing key black will be delivered to both Q1 and Q2.
+
+	Emitting logs:
+		We will use this model for out logging system. Instead of fanout we will send messages to a direct exchange. We will supply the log severity as a routing key. That way the receiving script will be able to select the severity it wants to receive. Let's focus on emitting logs first.
+
+		As first, we need to create an exchange:
+			channel.ExchangeDeclare(exchange: "direct_logs", type: "direct");
+
+		And we are ready to send a message:
+			channel.BasicPublish(exchange: "direct_logs", routingKey: severity, basicProperties: null, body: body);
+
+	Subscribing:
+		Receiving messages will work just like in the previous tutorial, with one exception - we are going to create a new binding for each severity we are interested in.
+			var queueName = channel.QueueDeclare().QueueName;
+
+			foreach(var severity in args)
+			{
+			    channel.QueueBind(queue: queueName, exchange: "direct_logs", routingKey: severity);
+			}
+
+
+Topics:
+	Previously we improved our logging system. Instead of using a fanout exchange only capable of dummy broadcasting, we used a direct one, and gained a possibility of selectively receving the logs.
+
+	Although using the direct exchange improved our system, it still has limitations - it can't do routing based on multiple criteria.
+
+	In our logging system we might want to subscribe to not only logs based on severity, but also based on the source which emitted the log. You might know this concept from the syslog unix tool, which routes logs based on both severity (info/warn/crit) and facility (auth/cron/kern).
+
+	That would give us a lot of flexibility - we may want to listen to just critical errors coming from 'cron' byt also all logs from 'kern'.
+
+	To implement that in our logging system we need to learn about a more complex topic exchange.
+
+	Topic exchange:
+		Messages sent to a topic exchange can't have an arbitrary routing_key - it must be a list of words, delimited by dots. The words can be anything, but usually they specify some features connected to the message. A few valid routing key examples: "stock.usd.nyse", "nyse.vmw", "quick.orange.rabbit". There can be as many words in the routing key as you like, up to the limit of 255 bytes.
+
+		The binding key must also be in the same form. The logic behind the topic exchange is similar to a direct one - a message sent with a particular routing key will be delivered to all the queues that are bound with a matching binding key. However there are two important special cases for binding keys:
+			- * (start) can substitute for exactly one word
+			- # (hash) can substitute for zero or more words
+
+		It's easiest to explain this in an example:
+			We are going to send messages which all describe animals. The messages will be sent with a routing key that consists of three words (two dots). The first word in the routing key will describe speed, second a colour and third a species: "<speed>.<colour>.<species>".
+
+			We created a three bindings: Q1 is bound with binding key: "*.orange.*" and Q2 with "*.*.rabbit" and "lazy.#".
+
+			These bindings can be summarised as:
+				- Q1 is interested in all the orange animals.
+				- Q2 wants to hear everything about rabbits, and everything about lazy animals.
+
+			A message with a routing key set to "quick.orange.rabbit" will be delivered to both queues. Message "lazy.orange.elephant" also will go to both of them. One the other hand "quick.orange.fox" will only go to the first queue, and "lazy.brown.fox" only to the second. "lazy.pink.rabbit" will be delivered to the second queue only once, even though it matches two bindings. "quick.brown.fox" doesn't match any bindings so it will be discarded.
+
+			What happens if we break our contract and send a message with one our four words, like "orange" or "quick.orange.male.rabbit"? Well, these messages won't match any bindings and will be lost.
+
+			On the other hand "lazy.orange.male.rabbit", even though it has four words, will match the last binding and will be delivered to the second queue.
+
+	Topic exchange:
+		Topic exchange is powerful and can behave like other exchanges.
+
+		When a queue is bound with "#" (hash) binding key - it will receive all the messages, regardless of the routing key - like in fanout exchange.
+
+		When special characters "*" (star) and "#" (hash) aren't used in bindings, the topic exchange will behave just like a direct one.
+
+
+Remote Procedure Call (RPC):
+	Previously we use Work Queues to distribute time-consuming tasks among multiple workers.
+
+	But what if we need to run a function on a remote computer and wait for the result? Well, that's a different story. This pattern is commonly known as Remote Procedure Call or RPC.
+
+	In this tutorial we are going to use RabbitMQ to build an RPC system: a client and a scalable RPC server. As we don't have any time-consuming tasks that are worth distributing, we are going to create a dummy RPC service that returns Fibonacci numbers.
+
+	Client interface:
+		To illustrate how an RPC service could be used we are going to create a simple client class. It's going to expose a method named Call which sends an RPC request and blocks until the answer is received:
+			var rpcClient = new RPCClient();
+			Console.WriteLine(" [x] Requesting fib(30)");
+			var response = rpcClient.Call("30");
+			Console.WriteLine(" [.] Got '{0}'", response);
+
+			rpcClient.Close();
+
+	A note on RPC:
+		Although RPC is a pretty common pattern in computing, it's often criticised. The problems arise when a programmer is not aware whether a function call is local or if it's a slow RPC. Confusions like that result in an unpredictable system and adds unnecessary complexity to debugging. Instead of simplifying software, misused RPC can result in unmaintainable spaghetti code.
+
+		Bearing that in mind, consider the following advice:
+			- Make sure it's obvious which function call is local and which is remote.
+			- Document your system. Make the dependencies between components clear.
+			- Handle error cases. How should the client react when the RPC server is down for a long time?
+
+		When in doubt avoid RPC. If you can, you should use an asynchronous pipeline - instead of RPC-like blocking, results are asynchronously pushed to a next computation stage.
+
+	Callback queue:
+		In general doing RPC over RabbitMQ is easy. A client sends a request message and a server replies with a response message. In order to receive a response we need to send a 'callback' queue address with the request:
+			var props = channel.CreateBasicProperites();
+			props.ReplyTo = replyQueueName;
+
+			var messageBytes = Encoding.UTF8.GetBytes(message);
+			channel.BasicPublish(exchange: "", routingKey: "rpc_queue", basicProperties: props, body: messageBytes);
+
+	Message properties:
+		The AMQP 0-9-1 protocol predefines a set of 14 properties that go with a message. Most of the properties are rarely used, with the exception of the following:
+			- Persistent: Marks a message as persistent (with a value of true) or transient (any other value).
+			- DeliveryMode: those familiar with the protocol may choose to use this property instead of Persistent. They control the same thing.
+			- ContentType: used to describe the mime-type of the encoding. For example for the often used JSON encoding it is a good practice to set this property to: application/json.
+			- ReplyTo: commonly used to name a callback queue.
+			- CorrelationId: Useful to correlate RPC responses with requests.
+
+	Correlation Id:
+		In the method presented above we suggest creating a callback queue for every RPC request. That's pretty inefficient, but fortunately there is a better way - let's create a single callback queue per client.
+
+		That raises a new issue, having received a response in that queue it's not clear to which request the response belongs. That's when the CorrelationId property is used. We are going to set it to a unique value for every request. Later, when we receive a message in the callback queue we will look at this property, and based on that we will be able to match a response with a request. If we see an unknown CorrelationId value, we may safely discard the message - it doesn't belong to our requests.
+
+		You may ask, why should we ignore unknown messages in the callback queue, rather than failing with an error? It's due to a possibility of a race condition on the server side. Although unlikely, it is possible that the RPC server will die just after sending us the answer, but before sending an acknowledgment message for the request. If that happens, the restarted RPC server will process the request again. That's why on the client we must handle the duplicate responses gracefully, and the RPC should ideally be idempotent.
+
+	Summary:
+		Our RPC wil work like this:
+			- When the Client starts up, it creates an anonymous exclusive callback queue.
+			- For an RPC request, the Client sends a message with two properties: ReplyTo, which is set to the callback queue and CorrelationId, which is set to a unique value for every request.
+			- The request is sent to an rpc_queue queue.
+			- The RPC worker (aka: server) is waiting for requests on that queue. When a request appears, it does the job and sends a message with the result back to the Client, using the queue from the ReplyTo property.
+			- The client waits for data on the callback queue. When a message appears, it checks the CorrelationId property. If it matches the value from the request it returns the response to the application.
+
+		The design presented here is not the only one possible implementation of a RPC service, but it has some important advantages:
+			- If the RPC server is too slow, you can scale up by just running another one.
+			- On the client side, the RPC requires sending and receiving only one message. No synchronous calls like QueueDeclare are required. As a result the RPC client needs only one network round trip for a single RPC request.
+
+		Our code is still pretty simplistic and doesn't try to solve more complex (but important) problems, like:
+			- How should the client react if there are no servers running?
+			- Should the client have some kind of timeout for the RPC?
+			- If the server malfunctions and raises an exception, should it be forwarded to the client?
+			- Protecting against invalid incoming messages (eg checking bounds, type) before processing.
+
+
+Publisher Confirms:
+	Publisher confirms are a RabbitMQ extension to implement reliable publishing. When publisher confirms are enabled on a channel, messages the client publishes are confirmed asynchronously by the broker, meaning they have been taken care of on the server side.
+
+	Overview:
+		In this tutorial we are going to use publisher confirms to make sure published messages have safely reached the broker. We will cover several strategies to using publisher confirms and explain their pros and cons.
+
+	Enabling Publisher Confirms on a Channel:
+		Publisher confirms are a RabbitMQ extension to the AMQP 0-9-1 protocol, so they are not enabled by default. Publisher confirms are enabled at the channel level with the ConfirmSelect method:
+			var channel = connection.CreateModel();
+			channel.ConfirmSelect();
+
+		This method must be called on every channel that you expect to use publisher confirms. Confirms should be enabled just once, not for every message published.
+
+	Strategy #1: Publishing Messages Individually:
+		Let's start with the simplest approach to publishing with confirms, that is, publishing a message and waiting synchronously for its confirmation:
+			while (ThereAreMessagesToPublish())
+			{
+				byte[] body = ...;
+				IBasicProperties properties = ...;
+				channel.BasicPublish(exchange, queue, properties, body);
+				// Uses a 5 second timeout
+				channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
+			}
+
+		In the previous example we publush a message as usual and wait for its confirmation with the Channel#WaitForConfirmsOrDie(TimeSpan) method. The method returns as soon as the message has been confirmed. If the message is not confirmed within the timeout or if it is neck-ed (meaning the broker could not take care of it for some reason), the method will throw an exception. The handling of the exception usually consists in logging an error message and/or retrying to send the message.
+
+		Different client libraries have different ways to synchronously deal with publisher confirms, so make sure to read carefully the documentation of the client you are using.
+
+		This technique is very straightforward but also has a major drawback: it significantly slows down publishing, as the confirmation of a message blocks the publishing of all subsequent messages. This approach is not going to deliver throughput of more than a few hundreds of published messages per second. Nevertheless, this can be good enough for some applications.
+
+		Are Publisher Confirms Asynchronous:
+			We mentioned at the beginning that the broker confirms published messages asynchronously but in the first example the code waits synchronously until the message is confirmed. The client actually receives confirms asynchronously and unblocks the call to WaitForConfirmsOrDie accordingly. Think of WaitForConfirmsOrDie as a synchronous helper which relies on asynchronous notifications under the hood.
+
+	Strategy #2: Publishing Messages in Batches:
+		To improve upon our previous example, we can publish a batch of messages and wait for this whole batch to be confirmed. The following example uses a batch of 100:
+			var batchSize = 100;
+			var outstandingMessageCount = 0;
+
+			while (ThereAreMessagesToPublish())
+			{
+				byte[] body = ...;
+				IBasicProperties properties = ...;
+				channel.BasicPublish(exchange, queue, properties, body);
+				outstandingMessageCount++;
+
+				if (outstandingMessageCount == batchSize)
+				{
+					channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
+					outstandingMessageCount = 0;
+				}
+			}
+
+			if (outstandingMessageCount > 0)
+			{
+				channel.WaitForConfirmsOrDie(new TimeSpan(0, 0, 5));
+			}
+
+		Waiting for a batch of messages to be confirmed improves throughput drastically over waiting for a confirm for individual message (up to 20-30 times with a remote RabbitMQ node). One drawback is that we do not know exactly what went wrong in case of failure, so we may have to keep a whole batch in memory to log something meaningful or to re-publish the messages. And this solution is still synchronous, so it blocks the publishing of messages.
+
+	Strategy #3: Handling Publisher Confirms Asynchronously:
+		The broker confirms published messages asynchronously, one just needs to register a callback on the client to be notified of these confirms:
+			var channel = connection.CreateModel();
+			channel.ConfirmSelect();
+			channel.BasicAcks += (sender, ea) =>
+			{
+				// Code when message is confirmed
+			};
+			channel.BasicNacks += (sender, ea) =>
+			{
+				// Code when message is nack-ed
+			};
+
+		There are 2 callbacks: one for confirmed messages and one for nack-ed messages (messages that can be considered lost by the broker). Both callbacks have a corresponding EventArgs parameter (ea) containing a:
+			- delivery tag: the sequence number identifying the confirmed or nack-ed message. We will see shortly how to correlate it with the published message.
+			- multiple: this is a boolean value. If false, only one message is confirmed/nack-ed, if true, all messages with a lower or equal sequence number are confirmed/nack-ed.
+
+		The sequence number can be obtained with ChannelNextPublishSeqNo before publishing:
+			var sequenceNumber = channel.NextPublishSeqNo;
+			channel.BasicPublish(exchange, queue, properties, body);
+
+		A simple way to correlate messages with sequence number consists in using a dictionary. Let's assume we want to publish strings because they are easy to turn into an array of bytes for publishing. Here is a code sample that uses a dictionary to correlate the publishing sequence number with the string body of the message:
+			var outstandingConfirms = new ConcurrentDictionary<ulong, string>();
+			// Code for confirm callbacks will come later
+			var body = "...";
+			outstandingConfirms.TryAdd(channel.NextPublishSeqNo, body);
+			channel.BasicPublish(exchange, queue, properties, Encoding.UTF8.GetBytes(body));
+
+		The publishing code now tracks outbound messages with a dictionary. We need to clean this dictionary when confirms arrive and do something like logging a warning when messages are nack-ed:
+			var outstandingConfirms = new ConcurrentDictionary<ulong, string>();
+
+			void cleanOutstandingConfirms(ulong sequenceNumber, bool multiple)
+			{
+				if (multiple)
+				{
+					var confirmed = outstandingConfirms.Where(k => k.Key <= sequenceNumber);
+
+					foreach (var entry in confirmed)
+					{
+						outstandingConfirms.TryRemove(entry.Key, out_);
+					}
+				}
+				else
+				{
+					outstandingConfirms.TryRemove(sequenceNumber, out _);
+				}
+			}
+
+			channel.BasicAcks += (sender, ea) => cleanOutstandingConfirms)ea.DeliveryTag, ea.Multiple);
+			channel.BasicNacks += (sender, ea) =>
+			{
+				outstandingConfirms.TryGetValue(ea.DeliveryTag, out string body);
+				Console.WriteLine($"Message with body {body} has been back-ed. Sequence number: {ea.DeliveryTag}, multiple: {ea.Multiple}");
+				cleanOutstandingConfirms(ea.DeliveryTag, ea.Multiple);
+			};
+
+		The previous sample contains a callback that cleans the dictionary when confirms arrive. Note this callback handles both single and multiple confirms. This callback is used when confirms arrive (Channel#BasicAcks). The callback for nack-ed messages retrieves the message body and issues a warning. It then re-uses the previous callback to clean the dictionary of outstanding confirms (whether messages are confirmed or nack-ed, their corresponding entries in the dictionary must be removed).
+
+	How to Track Outstanding Confirms:
+		Our samples use a ConcurrentDictionary to track outstanding confirms. This data structure is convenient for several reasons. It allows to easily correlate a sequence number with a message (whatever the message data is) and to easily clean the entries up to a given sequence id (to handle multiple confirms/nacks). At last, it supports concurrent access, because confirm callbacks are called in a thread owned by the client library, which should be kept different from the pubishing thread.
+
+		There are other ways to track outstanding confirms than with a sophisticated dictionary implementation, like using a simple concurrent hash table and a variable to track the lower bound of the publishing sequence, but they are usually more involved and do not belong to a tutorial.
+
+	To sum up, handling publisher confirms asynchronously usually requires the following steps:
+		- provide a way to correlate the publishing sequence number with a message
+		- register confirm listeners on the channel to be notified when publisher acks/nacks arrive to perform the appropriate actions, like logging or re-publishing a nack-ed message. The sequence-number-to-message correlation mechanism may also require some cleaning during this step.
+		- track the publishing sequence number before publishing a message.
+
+	Re-publishing nack-ed Messages:
+		It can be tempting to re-publish a nack-ed message from the corresponding callback but this should be avoided as confirm callbacks are dispatched in an I/O thread where channels are not supposed to do operations. A better solution consists in enqueing the message in an in-memory queue which is polled by a publishing thread. A class like ConcurrentQueue would be a good candidate to transmit messages between the confirm callbacks and a publishing thread.
+
+	Summary:
+		Making sure published messages made it to the broker can be essential in some applications. Publisher confirms are a RabbitMQ feature that helps to meet this requirement. Publisher confirms are asynchronous in nature but it is also possible to handle them synchronously. There is not definitive way to implement publisher confirms, this usually comes down to the constraints in the application and in the overall system. Typical techniques are:
+			- publishing messages individually, waiting for the confirmation synchronously: simple, but very limited throughput
+			- publishing messages in batch, waiting for the confirmation synchronously for a batch: simple, reasonable throughput, but hard to reason about when something	 goes wrong
+			- asynchronous handling: best performance and use of resources, good control in case of error, byt can be involved to implement correctly.

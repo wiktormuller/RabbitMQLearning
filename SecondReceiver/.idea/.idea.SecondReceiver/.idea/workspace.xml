@@ -5,39 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e742d86-9425-4566-ae4e-0c484739bd86" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Receiver/.idea/.idea.Receiver/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.SecondReceiver/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Sender/.idea/.idea.Sender/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/bin/Debug/net6.0/Receiver.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/bin/Debug/net6.0/Receiver.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/bin/Debug/net6.0/Receiver.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/bin/Debug/net6.0/Receiver.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.genruntimeconfig.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/Debug/net6.0/Receiver.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/Receiver.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/Receiver.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/project.packagespec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Receiver/Receiver/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Receiver/Receiver/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SecondReceiver/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SecondReceiver/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Sender/Sender/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/bin/Debug/net6.0/Sender.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/bin/Debug/net6.0/Sender.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/bin/Debug/net6.0/Sender.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/bin/Debug/net6.0/Sender.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.assets.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.csproj.FileListAbsolute.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.genruntimeconfig.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/Sender.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/ref/Sender.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/ref/Sender.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/refint/Sender.dll" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Debug/net6.0/refint/Sender.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/Sender.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/Sender.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/project.packagespec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Sender/Sender/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/../Sender/Sender/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +56,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1665592515249</updated>
-      <workItem from="1665592567257" duration="2382000" />
+      <workItem from="1665592567257" duration="3231000" />
     </task>
     <servers />
   </component>

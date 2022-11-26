@@ -1,0 +1,17 @@
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\bin\Debug\net6.0\ReceiveLogs.exe
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\bin\Debug\net6.0\ReceiveLogs.deps.json
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\bin\Debug\net6.0\ReceiveLogs.runtimeconfig.json
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\bin\Debug\net6.0\ReceiveLogs.dll
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\bin\Debug\net6.0\ReceiveLogs.pdb
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.csproj.AssemblyReference.cache
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.AssemblyInfoInputs.cache
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.AssemblyInfo.cs
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.csproj.CoreCompileInputs.cache
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.csproj.CopyComplete
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.dll
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\refint\ReceiveLogs.dll
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.pdb
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ReceiveLogs.genruntimeconfig.cache
+C:\Users\Wiktor\Desktop\ReceiveLogs\ReceiveLogs\obj\Debug\net6.0\ref\ReceiveLogs.dll

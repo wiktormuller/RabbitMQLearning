@@ -1,0 +1,17 @@
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\bin\Debug\net6.0\EmitLogDirect.exe
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\bin\Debug\net6.0\EmitLogDirect.deps.json
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\bin\Debug\net6.0\EmitLogDirect.runtimeconfig.json
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\bin\Debug\net6.0\EmitLogDirect.dll
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\bin\Debug\net6.0\EmitLogDirect.pdb
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.csproj.AssemblyReference.cache
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.AssemblyInfoInputs.cache
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.AssemblyInfo.cs
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.csproj.CoreCompileInputs.cache
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.csproj.CopyComplete
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.dll
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\refint\EmitLogDirect.dll
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.pdb
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\EmitLogDirect.genruntimeconfig.cache
+C:\Users\Wiktor\Desktop\EmitLogDirect\EmitLogDirect\obj\Debug\net6.0\ref\EmitLogDirect.dll

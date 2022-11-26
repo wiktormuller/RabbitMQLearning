@@ -1,0 +1,17 @@
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\bin\Debug\net6.0\EmitLogTopic.exe
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\bin\Debug\net6.0\EmitLogTopic.deps.json
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\bin\Debug\net6.0\EmitLogTopic.runtimeconfig.json
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\bin\Debug\net6.0\EmitLogTopic.dll
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\bin\Debug\net6.0\EmitLogTopic.pdb
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.csproj.AssemblyReference.cache
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.AssemblyInfoInputs.cache
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.AssemblyInfo.cs
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.csproj.CoreCompileInputs.cache
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.csproj.CopyComplete
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.dll
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\refint\EmitLogTopic.dll
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.pdb
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\EmitLogTopic.genruntimeconfig.cache
+C:\Users\Wiktor\Desktop\EmitLogTopic\EmitLogTopic\obj\Debug\net6.0\ref\EmitLogTopic.dll

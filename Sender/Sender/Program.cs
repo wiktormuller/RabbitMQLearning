@@ -44,7 +44,7 @@ using (var channel = connection.CreateModel())
     var properties = channel.CreateBasicProperties();
     properties.Persistent = true;
     
-    channel.BasicPublish(exchange: "", routingKey: "hello", basicProperties: null, body: body);
+    channel.BasicPublish(exchange: "", routingKey: "hello", basicProperties: null, body: body); // Default exchange
 
     Console.WriteLine($" [x] Sent {message}");
     

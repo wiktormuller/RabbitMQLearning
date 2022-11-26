@@ -1,0 +1,17 @@
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\bin\Debug\net6.0\ReceiveLogsDirect.exe
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\bin\Debug\net6.0\ReceiveLogsDirect.deps.json
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\bin\Debug\net6.0\ReceiveLogsDirect.runtimeconfig.json
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\bin\Debug\net6.0\ReceiveLogsDirect.dll
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\bin\Debug\net6.0\ReceiveLogsDirect.pdb
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\bin\Debug\net6.0\RabbitMQ.Client.dll
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.csproj.AssemblyReference.cache
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.AssemblyInfoInputs.cache
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.AssemblyInfo.cs
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.csproj.CoreCompileInputs.cache
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.csproj.CopyComplete
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.dll
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\refint\ReceiveLogsDirect.dll
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.pdb
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ReceiveLogsDirect.genruntimeconfig.cache
+C:\Users\Wiktor\Desktop\ReceiveLogsDirect\ReceiveLogsDirect\obj\Debug\net6.0\ref\ReceiveLogsDirect.dll
